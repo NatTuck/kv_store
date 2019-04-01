@@ -1,0 +1,5 @@
+Host seagull
+  Hostname seagull.ccs.neu.edu
+
+Host bot*
+  ProxyCommand ssh -q seagull nc -q0 %h 22
