@@ -13,6 +13,14 @@ defmodule KvStore.MapServer do
     GenServer.call(__MODULE__, {:get, k})
   end
 
+  def put(node, k, v) do
+    GenServer.call({__MODULE__, node}, {:put, k, v})
+  end
+
+  def get(node, k) do
+    GenServer.call({__MODULE__, node}, {:get, k})
+  end
+
   @impl true
   def init(map) do
     {:ok, map}
