@@ -22,8 +22,16 @@ defmodule KvStore.MapServer do
   end
 
   @impl true
-  def init(map) do
-    {:ok, map}
+  def init(default) do
+    # Get the map from all remote nodes.
+    {replies, _} = GenServer.multi_call(Node.list(), __MODULE__, :get_map, 1000)
+    if Enum.empty?(replies) do
+      {:ok, default}
+    else
+      # All nodes have the current state, so we just take the first one.
+      {_node, map} = hd(replies)
+      {:ok, map}
+    end
   end
 
   @impl true
@@ -32,7 +40,13 @@ defmodule KvStore.MapServer do
     {:reply, :ok, state}
   end
 
+  @impl true
   def handle_call({:get, k}, _from, state) do
     {:reply, Map.get(state, k), state}
+  end
+
+  @impl true
+  def handle_call(:get_map, _from, state) do
+    {:reply, state, state}
   end
 end
