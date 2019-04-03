@@ -1,18 +1,18 @@
 defmodule KvStore do
-  @moduledoc """
-  Documentation for KvStore.
-  """
+  def get(k) do
+    # Need one node, so grab the local copy.
+    KvStore.MapServer.get(k)
+  end
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> KvStore.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def put(k, v) do
+    nodes = [Node.self() | Node.list()]
+    results = Enum.map nodes, fn node ->
+      KvStore.MapServer.put(node, k, v)
+    end
+    if Enum.all?(results, &(&1 == :ok)) do
+      :ok
+    else
+      {:error, "didn't write to all replicas"}
+    end
   end
 end
