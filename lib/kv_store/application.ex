@@ -10,6 +10,7 @@ defmodule KvStore.Application do
     children = [
       # Starts a worker by calling: KvStore.Worker.start_link(arg)
       # {KvStore.Worker, arg}
+      KvStore.MapServer
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
