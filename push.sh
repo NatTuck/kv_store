@@ -6,4 +6,6 @@ DIR=$(basename $(pwd))
 
 cd ..
 parallel -i rsync -rlpxzith --stats --del --safe-links $DIR nat@{}:~/ -- $HOSTS
+parallel -i ssh nat@{} rm ~/.erlang.cookie -- $HOSTS
+parallel -i scp ~/.erlang.cookie nat@{}:~ -- $HOSTS
 

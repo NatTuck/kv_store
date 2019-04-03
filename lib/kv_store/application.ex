@@ -7,10 +7,10 @@ defmodule KvStore.Application do
 
   def start(_type, _args) do
     topologies = [
-      local: [
+      bots: [
         strategy: Cluster.Strategy.Epmd,
         config: [
-          hosts: [:node0@localhost, :node1@localhost, :node2@localhost]
+          hosts: [:kv@bot00, :kv@bot01, :kv@bot02, :kv@bot03, :kv@bot04]
         ],
       ],
     ]
