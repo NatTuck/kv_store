@@ -6,10 +6,20 @@ defmodule KvStore.Application do
   use Application
 
   def start(_type, _args) do
+    topologies = [
+      local: [
+        strategy: Cluster.Strategy.Epmd,
+        config: [
+          hosts: [:node0@localhost, :node1@localhost, :node2@localhost]
+        ],
+      ],
+    ]
+
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: KvStore.Worker.start_link(arg)
       # {KvStore.Worker, arg}
+      {Cluster.Supervisor, [topologies, [name: KvStore.ClusterSupervisor]]},
       KvStore.MapServer
     ]
 
